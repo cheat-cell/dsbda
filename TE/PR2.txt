@@ -1,0 +1,17 @@
+df['gender'].fillna(df['gender'].mode()[0])
+
+df['raisedhands'].fillna(df['raisedhands'].mean())
+
+sns.boxplot(data=df,x='raisedhands')
+plt.title("Boxplot of RaisedHands")
+plt.show()
+
+Q1=df['raisedhands'].quantile(0.25)
+Q3=df['raisedhands'].quantile(0.75)
+IQR=Q3-Q1
+lower_bound=Q1-1.5*IQR
+upper_bound=Q3+1.5*IQR
+df['raisedhands']=np.clip(df['raisedhands'],lower_bound,upper_bound)
+
+transformer=PowerTransformer(method='yeo-johnson')
+df['raisedhands']=transformer.fit_transform(df[['raisedhands']])
